@@ -1,6 +1,7 @@
 <app-create-task 
         *ngIf="showCreateTaskForm" 
         (CloseForm)="CloseCreateTaskForm()"
+        (EmitTaskData)="CreateTask($event)"
 ></app-create-task>
 
 <div class="dashboard-container">
@@ -18,7 +19,7 @@
     <hr>
 
     <div class="dashboard-item-container">
-            <div class="task-item">
+            <div class="task-item task-open">
                 <div class="task-title">
                     <h3>Task Title</h3>
                 </div>

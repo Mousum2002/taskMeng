@@ -3,10 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { Header } from './header/header';
 import { Footer } from './footer/footer';
 import { Dashboard } from './dashboard/dashboard';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, Footer, Dashboard],
+  imports: [RouterOutlet, Header, Footer, Dashboard, CommonModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
