@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Task } from '../Model/Task';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs';
+import { TaskService } from '../Services/task.service';
 
 
 @Component({
@@ -13,10 +14,16 @@ import { map } from 'rxjs';
   styleUrl: './dashboard.css',
 })
 export class Dashboard implements OnInit {
+
+  //these is not an optimal design as some the buiness logic is still in the component, should be moved to the service implementing signals. for now just to demo only
    showCreateTaskForm: boolean = false;
    http:HttpClient = inject(HttpClient);
-   allTasks: Task[] = [];
    cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
+   taskService: TaskService = inject(TaskService);
+   allTasks: Task[] = [];
+
+   editMode: boolean = false;
+   selectedTask: Task;
 
    ngOnInit(){
     this.fetchTasks();
@@ -25,37 +32,62 @@ export class Dashboard implements OnInit {
 
   OpenCreateTaskForm(){
     this.showCreateTaskForm = true;
+    this.editMode = false;
+    this.selectedTask = null;
+    this.cdr.detectChanges();
   }
 
   CloseCreateTaskForm(){
     this.showCreateTaskForm = false;
   }
   CreateTask(data: Task){
-    const header = new HttpHeaders({
-      'MyHeader': 'hello world'
-    });
-    this.http.post<{name:string}>('https://angularhttpclient-c80a8-default-rtdb.firebaseio.com/tasks.json',data,
-      {headers: header}).subscribe((response)=>{
+
+     this.taskService.CreateTask(data).subscribe((response)=>{
       console.log(response);
-      
-    });
+      // cloud use this.fetchTasks() to get the updated list of tasks but to avoid extra http request we can directly update the allTasks array with the new task data
+      // a fetch button will be provided just in case
+      this.allTasks.push({...data, id: response.name});
+
+      this.cdr.detectChanges(); });
   }
 
   private fetchTasks(){
-    this.http.get<{[key:string]: Task}>('https://angularhttpclient-c80a8-default-rtdb.firebaseio.com/tasks.json').pipe(map((response)=>{
-      let tasks = [];
-      for(let key in response){
-        if(response.hasOwnProperty(key)){
-        tasks.push({...response[key], id: key})}
-      }
-      return tasks;
-    })).subscribe
+    this.taskService.fatchTasks().subscribe
     ((tasks)=>{
       this.allTasks = tasks;
       this.cdr.detectChanges();
-      console.log(this.allTasks.map(t => t.id))
-      console.log(this.allTasks.length);
     });
   }
+
+  FetchTasks(){
+    this.fetchTasks();
+  }
+
+  deleteTask(taskId: string | undefined){
+    if(!taskId) return;
+    this.taskService.deleteTask(taskId).subscribe(()=>{
+      //same reson as above, to not make double request
+      this.allTasks = this.allTasks.filter(task => task.id !== taskId);
+      this.cdr.detectChanges();
+    });
+  }
+
+  deleteAllTasks(){
+    this.taskService.deleteAllTasks().subscribe(()=>{
+      this.allTasks = [];
+      this.cdr.detectChanges();
+    });
+  }
+
+  EditTask(taskId: string | undefined){
+    this.showCreateTaskForm = true;
+    this.editMode = true;
+    this.selectedTask = this.allTasks.find((task) =>{return task.id === taskId});
+    console.log(this.selectedTask);
+    this.cdr.detectChanges();
+  }
+
+
+
 
 }

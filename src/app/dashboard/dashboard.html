@@ -2,6 +2,8 @@
     <app-create-task 
         (CloseForm)="CloseCreateTaskForm()"
         (EmitTaskData)="CreateTask($event)"
+        [isEditMode]="editMode"
+        [taskData]="selectedTask"
     ></app-create-task>
 }
 <div class="dashboard-container">
@@ -11,8 +13,8 @@
         </div>
         <div style="width: 50%; text-align: right;">
             <button class="create-task-btn" (click)="OpenCreateTaskForm()">Create Task</button>
-            <button class="create-task-btn">Fetch Tasks</button>
-            <button class="create-task-btn">Clear Tasks</button>
+            <button class="create-task-btn" (click)="FetchTasks()">Fetch Tasks</button>
+            <button class="create-task-btn" (click)="deleteAllTasks()">Clear Tasks</button>
         </div>
     </div>
 
@@ -23,7 +25,7 @@
 <div class="dashboard-item-container">
     
   @for (task of allTasks;  track task.id) {
-    <div class="task-item task-open">
+    <div class="task-item" [ngClass]="'task-' + task.status">
       <div class="task-title">
         <h3>{{ task.title }}</h3>
       </div>
@@ -34,10 +36,10 @@
         <button class="task-action-btn" title="Detail">
           <i class="fa fa-info-circle" aria-hidden="true"></i>
         </button>
-        <button class="task-action-btn" title="Edit">
+        <button class="task-action-btn" title="Edit" (click)="EditTask(task.id)">
           <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
         </button>
-        <button class="task-action-btn" title="Delete">
+        <button class="task-action-btn" title="Delete" (click)="deleteTask(task.id)">
           <i class="fa fa-trash" aria-hidden="true"></i>
         </button>      
       </div>

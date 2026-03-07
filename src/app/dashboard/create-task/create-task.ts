@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild, viewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Task } from '../../Model/Task';
 
@@ -21,6 +21,23 @@ export class CreateTask {
     this.EmitTaskData.emit(form.value);
     this.CloseForm.emit(false);
   }
+
+  @Input()
+  isEditMode: boolean = false;
+
+  @Input()
+  taskData: Task | null = null;
+
+  @ViewChild('taskForm') taskForm: NgForm;
+
+  ngAfterViewInit(){
+    setTimeout(() => {
+    this.taskForm.form.patchValue(this.taskData);
+  },0);
+  }
+
+
+
     
   }
 
