@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild, viewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Task } from '../../Model/Task';
 

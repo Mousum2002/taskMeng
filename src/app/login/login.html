@@ -1,0 +1,19 @@
+<div class="app-login-form">
+    <h2>{{ isLoggingMode ? 'Login' : 'Sign Up' }} Here</h2>
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+        <div class = "form-input">
+            <label> Email Address</label>
+            <input type="email" placeholder="Enter your email" required name="email" >
+        </div>
+        <div class = "form-input">
+            <label> Password</label>
+            <input type="password" placeholder="Enter your password" required name="password" >
+        </div>
+        <button type="submit" class="app-login-btn">{{ isLoggingMode ? 'Login' : 'Sign Up' }}</button>
+        <p> Do not have an account yet?
+            <button class = "app-toggle-btn" type="button" (click)="toggleMode()" [disabled] = "loginForm.invalid">
+                {{ isLoggingMode ? 'Sign Up' : 'Login' }}
+            </button>
+        </p>
+    </form>
+</div>

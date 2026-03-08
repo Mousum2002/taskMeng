@@ -119,6 +119,7 @@ export class Dashboard implements OnInit {
   }
 
   deleteAllTasks(){
+    confirm("Are you sure you want to delete all tasks?") &&
     this.taskService.deleteAllTasks().subscribe({next: ()=>{
       this.allTasks = [];
       this.cdr.detectChanges();
