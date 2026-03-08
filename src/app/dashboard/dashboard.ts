@@ -21,34 +21,52 @@ export class Dashboard implements OnInit {
    cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
    taskService: TaskService = inject(TaskService);
    allTasks: Task[] = [];
+   
 
    editMode: boolean = false;
    selectedTask: Task;
 
    ngOnInit(){
     this.fetchTasks();
+
    }
 
+   updateTask(updated: Task) {
+    this.allTasks = this.allTasks.map(task =>
+      task.id === updated.id ? { ...task, ...updated } : task
+    )
+    console.log(this.allTasks);
+    this.cdr.detectChanges()}
 
   OpenCreateTaskForm(){
     this.showCreateTaskForm = true;
     this.editMode = false;
     this.selectedTask = null;
-    this.cdr.detectChanges();
+    this.cdr.detectChanges();  
   }
+  
 
   CloseCreateTaskForm(){
     this.showCreateTaskForm = false;
   }
   CreateTask(data: Task){
-
+  // cloud use this.fetchTasks() to get the updated list of tasks but to avoid extra http request we can directly update the allTasks array with the new task data
+  // a fetch button will be provided just in case
+    if(this.editMode){
+      
+      this.taskService.updateTask(data).subscribe(()=>{
+        this.updateTask(data);
+        this.editMode = false;
+        this.selectedTask = null;
+        this.fetchTasks();
+      });
+    }
+    else{
      this.taskService.CreateTask(data).subscribe((response)=>{
       console.log(response);
-      // cloud use this.fetchTasks() to get the updated list of tasks but to avoid extra http request we can directly update the allTasks array with the new task data
-      // a fetch button will be provided just in case
       this.allTasks.push({...data, id: response.name});
-
       this.cdr.detectChanges(); });
+     }
   }
 
   private fetchTasks(){

@@ -18,7 +18,7 @@ export class CreateTask {
     this.CloseForm.emit(false);
   }
   OnFormSubmit(form:NgForm){
-    this.EmitTaskData.emit(form.value);
+    this.EmitTaskData.emit(new Task(form.value.title, form.value.description, form.value.assignTo,form.value.createdAt,form.value.priority, form.value.status, this.taskData?.id));
     this.CloseForm.emit(false);
   }
 

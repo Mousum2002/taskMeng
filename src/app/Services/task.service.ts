@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { ChangeDetectorRef, inject, Injectable, signal, WritableSignal } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { Task } from "../Model/Task";
 import { map } from "rxjs/internal/operators/map";
+import { Observable } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -26,6 +27,11 @@ export class TaskService {
       }
       return tasks;
     }))}
+
+  
+    updateTask(data: Task):Observable<Task>{
+       return this.http.put<Task>(`https://angularhttpclient-c80a8-default-rtdb.firebaseio.com/tasks/${data.id}.json`, data);
+    }
 
     deleteTask(taskId: string | undefined){
     return this.http.delete(`https://angularhttpclient-c80a8-default-rtdb.firebaseio.com/tasks/${taskId}.json`)}
