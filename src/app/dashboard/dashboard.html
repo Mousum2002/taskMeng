@@ -23,7 +23,10 @@
 
         
 <div class="dashboard-item-container">
-    
+@if (isLoading) {
+  <div class="loader"></div>
+}
+@else {
   @for (task of allTasks;  track task.id) {
     <div class="task-item" [ngClass]="'task-' + task.status">
       <div class="task-title">
@@ -47,5 +50,6 @@
   } @empty {
     <div class="no-tasks">No tasks available</div>
   }
+}
 </div>
 </div>

@@ -21,6 +21,8 @@ export class Dashboard implements OnInit {
    cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
    taskService: TaskService = inject(TaskService);
    allTasks: Task[] = [];
+
+   isLoading:boolean = false;
    
 
    editMode: boolean = false;
@@ -70,9 +72,11 @@ export class Dashboard implements OnInit {
   }
 
   private fetchTasks(){
+    this.isLoading = true;
     this.taskService.fatchTasks().subscribe
     ((tasks)=>{
       this.allTasks = tasks;
+      this.isLoading = false;
       this.cdr.detectChanges();
     });
   }
