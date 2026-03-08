@@ -2,8 +2,8 @@ import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CreateTask } from './create-task/create-task';
 import { CommonModule } from '@angular/common';
 import { Task } from '../Model/Task';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import {Subject } from 'rxjs';
 import { TaskService } from '../Services/task.service';
 
 
@@ -15,7 +15,7 @@ import { TaskService } from '../Services/task.service';
 })
 export class Dashboard implements OnInit {
 
-  //these is not an optimal design as some the buiness logic is still in the component, should be moved to the service implementing signals. for now just to demo only
+  //these is not an optimal design as some the buiness logic is still in the component, should be moved to the service implementing signals. i am using manual change ditection for practice only
    showCreateTaskForm: boolean = false;
    http:HttpClient = inject(HttpClient);
    cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
@@ -23,6 +23,8 @@ export class Dashboard implements OnInit {
    allTasks: Task[] = [];
 
    isLoading:boolean = false;
+   error$ = new Subject<HttpErrorResponse>;
+   errorMeg:string| null= null;
    
 
    editMode: boolean = false;
@@ -30,7 +32,11 @@ export class Dashboard implements OnInit {
 
    ngOnInit(){
     this.fetchTasks();
+    this.error$.subscribe((err)=>{this.handleError(err)});
+   }
 
+   ngOnDestroy(){
+    this.error$.unsubscribe();
    }
 
    updateTask(updated: Task) {
@@ -55,29 +61,38 @@ export class Dashboard implements OnInit {
   // cloud use this.fetchTasks() to get the updated list of tasks but to avoid extra http request we can directly update the allTasks array with the new task data
   // a fetch button will be provided just in case
     if(this.editMode){
-      
-      this.taskService.updateTask(data).subscribe(()=>{
+      this.taskService.updateTask(data).subscribe({next: ()=>{
         this.updateTask(data);
         this.editMode = false;
         this.selectedTask = null;
         this.fetchTasks();
-      });
+      }, 
+      error: (err)=>{
+        this.error$.next(err);
+      }});
     }
     else{
-     this.taskService.CreateTask(data).subscribe((response)=>{
+     this.taskService.CreateTask(data).subscribe({next: (response)=>{
       console.log(response);
       this.allTasks.push({...data, id: response.name});
-      this.cdr.detectChanges(); });
+      this.cdr.detectChanges(); }, 
+      error: (err)=>{
+        this.error$.next(err);
+      }});
      }
   }
 
   private fetchTasks(){
     this.isLoading = true;
     this.taskService.fatchTasks().subscribe
-    ((tasks)=>{
+    ({next:(tasks)=>{
       this.allTasks = tasks;
       this.isLoading = false;
-      this.cdr.detectChanges();
+      this.cdr.detectChanges();}, 
+      error: (err)=>{
+        this.isLoading = false;
+        this.error$.next(err);
+      }
     });
   }
 
@@ -87,18 +102,25 @@ export class Dashboard implements OnInit {
 
   deleteTask(taskId: string | undefined){
     if(!taskId) return;
-    this.taskService.deleteTask(taskId).subscribe(()=>{
+    this.taskService.deleteTask(taskId).subscribe({next: ()=>{
       //same reson as above, to not make double request
       this.allTasks = this.allTasks.filter(task => task.id !== taskId);
       this.cdr.detectChanges();
-    });
+    }, 
+    error: (err)=>{
+      this.error$.next(err);
+    }
+});
   }
 
   deleteAllTasks(){
-    this.taskService.deleteAllTasks().subscribe(()=>{
+    this.taskService.deleteAllTasks().subscribe({next: ()=>{
       this.allTasks = [];
       this.cdr.detectChanges();
-    });
+    }, 
+    error: (err)=>{
+      this.error$.next(err);
+    }});
   }
 
   EditTask(taskId: string | undefined){
@@ -109,7 +131,25 @@ export class Dashboard implements OnInit {
     this.cdr.detectChanges();
   }
 
+  handleError(err: HttpErrorResponse){
+    if(err.error.error === "Permission denied"){
+      this.errorMeg = "You don't have permission to perform this action.";
+      
+      this.cdr.detectChanges();
+      setTimeout(() => {
+        this.errorMeg = null;
+        this.cdr.detectChanges();
+      }, 4000);
+    }
+    else{
+      this.errorMeg = "An unexpected error occurred. Please try again later.";
+      this.cdr.detectChanges();
+      console.log(err);
+      setTimeout(() => {
+        this.errorMeg = null;
+        this.cdr.detectChanges();
+      }, 4000);
+    }
 
-
-
+  }
 }
