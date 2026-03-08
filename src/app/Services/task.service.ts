@@ -3,7 +3,6 @@ import { inject, Injectable } from "@angular/core";
 import { Task } from "../Model/Task";
 import { map } from "rxjs/internal/operators/map";
 import { Observable, throwError,catchError } from "rxjs";
-import { LoggingService } from "./Logging.Service";
 
 
 @Injectable({

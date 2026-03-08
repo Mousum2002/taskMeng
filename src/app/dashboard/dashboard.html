@@ -6,6 +6,13 @@
         [taskData]="selectedTask"
     ></app-create-task>
 }
+@if (showDetailsTaks) {
+  <app-task-details 
+    [taskData]="selectedTask"
+    (inShowDetails)="closeDetails()"
+></app-task-details>
+}
+
 <div class="dashboard-container">
     <div style="display: flex;">
         <div style="width: 50%">
@@ -38,7 +45,7 @@
       <p><b>Priority: </b>{{ task.priority }}</p>
       <p><b>Status: </b>{{ task.status }}</p>
       <div class="task-action-icons">
-        <button class="task-action-btn" title="Detail">
+        <button class="task-action-btn" title="Detail" (click)="showDetails(true); selectedTask = task;">
           <i class="fa fa-info-circle" aria-hidden="true"></i>
         </button>
         <button class="task-action-btn" title="Edit" (click)="EditTask(task.id)">

@@ -1,33 +1,33 @@
 <div class="overlay">
 	<div class="popup">
-        <h2>Task Title</h2>
+        <h2>{{taskData.title}}</h2>
         <hr>
-		<a class="close" href="#">&times;</a>
+		<a class="close" href="#" (click)="onCloseDetails()">&times;</a>
 		<div class="content">
 			<section class="container">
                 
                 <h3>Description</h3>
                 <p>
-                    Task Description
+                    {{ taskData.description }}
                 </p>
                 <div style="display: flex; margin-top: 20px;">
                     <div style="width: 50%;">
                         <strong>Assigned To: </strong>
-                        John Smith
+                        {{ taskData.assignTo }}
                     </div>
                     <div style="width: 50%;">
                         <strong>Created At: </strong>
-                        20-10-2023
+                        {{ taskData.createdAt }}
                     </div>
                 </div>
                 <div style="display: flex; margin-top: 20px;">
                     <div style="width: 50%;">
                         <strong>Priority: </strong>
-                        High
+                        {{ taskData.priority }}
                     </div>
                     <div style="width: 50%;">
                         <strong>Current Status: </strong>
-                        In Progress
+                        {{ taskData.status }}
                     </div>
                 </div>
             </section>

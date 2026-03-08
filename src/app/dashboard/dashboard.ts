@@ -6,11 +6,12 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import {Subject } from 'rxjs';
 import { TaskService } from '../Services/task.service';
 import { LoggingService } from '../Services/Logging.Service';
+import { TaskDetails } from "./task-details/task-details";
 
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CreateTask, CommonModule],
+  imports: [CreateTask, CommonModule, TaskDetails],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -31,6 +32,8 @@ export class Dashboard implements OnInit {
 
    editMode: boolean = false;
    selectedTask: Task;
+
+
 
    ngOnInit(){
     this.fetchTasks();
@@ -155,4 +158,15 @@ export class Dashboard implements OnInit {
     }
 
   }
+
+  showDetailsTaks:boolean = false;
+  showDetails(show: boolean){
+    this.showDetailsTaks = show;
+  }
+  closeDetails(){
+    this.showDetailsTaks = false;
+    this.selectedTask = null;
+    this.cdr.detectChanges();
+  }
+
 }
