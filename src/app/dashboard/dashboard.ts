@@ -5,6 +5,7 @@ import { Task } from '../Model/Task';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import {Subject } from 'rxjs';
 import { TaskService } from '../Services/task.service';
+import { LoggingService } from '../Services/Logging.Service';
 
 
 @Component({
@@ -16,7 +17,8 @@ import { TaskService } from '../Services/task.service';
 export class Dashboard implements OnInit {
 
   //these is not an optimal design as some the buiness logic is still in the component, should be moved to the service implementing signals. i am using manual change ditection for practice only
-   showCreateTaskForm: boolean = false;
+  loggingService: LoggingService = inject(LoggingService); 
+  showCreateTaskForm: boolean = false;
    http:HttpClient = inject(HttpClient);
    cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
    taskService: TaskService = inject(TaskService);
@@ -132,6 +134,7 @@ export class Dashboard implements OnInit {
   }
 
   handleError(err: HttpErrorResponse){
+    this.loggingService.logError({statusCode: err.status, errorMessage: err.message, dateTime: new Date()});
     if(err.error.error === "Permission denied"){
       this.errorMeg = "You don't have permission to perform this action.";
       

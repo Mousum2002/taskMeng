@@ -3,11 +3,13 @@ import { inject, Injectable } from "@angular/core";
 import { Task } from "../Model/Task";
 import { map } from "rxjs/internal/operators/map";
 import { Observable, throwError,catchError } from "rxjs";
+import { LoggingService } from "./Logging.Service";
+
 
 @Injectable({
     providedIn: 'root'
 })
-export class TaskService {
+export class TaskService { 
     http: HttpClient = inject(HttpClient);
     allTasks: Task[] = [];
     CreateTask(data: Task){
@@ -25,9 +27,7 @@ export class TaskService {
         if(response.hasOwnProperty(key)){
         tasks.push({...response[key], id: key})}
       }
-      return tasks;
-    }))}
-
+      return tasks;}))}
   
     updateTask(data: Task):Observable<Task>{
        return this.http.put<Task>(`https://angularhttpclient-c80a8-default-rtdb.firebaseio.com/tasks/${data.id}.json`, data);
