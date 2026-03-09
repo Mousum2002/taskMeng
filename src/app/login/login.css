@@ -1,6 +1,5 @@
 .app-login-form{
     width: 520px;
-    height: 360px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     padding: 30px 30px;
     border-radius: 10px;
@@ -15,7 +14,7 @@
     border: #eee 2px solid;
     padding: 0px 20px;
 }
-.app-login-btn{
+.login-btn{
     width: 100%;
     border: none;
     padding: 15px;
@@ -29,4 +28,13 @@
     background-color: transparent;
     color: #0e0ede;
     cursor: pointer;
+}
+.login-btn:disabled{
+    background-color: #eee;
+    color: #aaa;
+    cursor: not-allowed;
+}
+.enter-hint{
+    font-size: 10px;
+    color: red;
 }

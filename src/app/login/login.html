@@ -3,15 +3,19 @@
     <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
         <div class = "form-input">
             <label> Email Address</label>
-            <input type="email" placeholder="Enter your email" required name="email" >
+            <input ngModel type="email" placeholder="Enter your email" required email name="email" >
+            @if( loginForm.controls['email']?.invalid && loginForm.controls['email']?.touched) {
+            <small class="enter-hint">*Please enter a valid email address.</small>}
         </div>
         <div class = "form-input">
             <label> Password</label>
-            <input type="password" placeholder="Enter your password" required name="password" >
+            <input ngModel type="password" placeholder="Enter your password" required  minlength="8" name="password" >
+            @if( loginForm.controls['password']?.invalid && loginForm.controls['password']?.touched) {
+            <small class="enter-hint">*Password must be at least 8 characters long.</small>}
         </div>
-        <button type="submit" class="app-login-btn">{{ isLoggingMode ? 'Login' : 'Sign Up' }}</button>
-        <p> Do not have an account yet?
-            <button class = "app-toggle-btn" type="button" (click)="toggleMode()" [disabled] = "loginForm.invalid">
+        <button type="submit" class="login-btn" [disabled]="loginForm.invalid">{{ isLoggingMode ? 'Login' : 'Sign Up' }}</button>
+        <p>{{isLoggingMode ? "Don't have an account yet?" : "Already have an account?"}}
+            <button class = "app-toggle-btn" type="button" (click)="toggleMode(loginForm)" >
                 {{ isLoggingMode ? 'Sign Up' : 'Login' }}
             </button>
         </p>

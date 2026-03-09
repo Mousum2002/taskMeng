@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
+import { AuthService } from '../Services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -10,13 +11,21 @@ import { FormsModule, NgForm } from '@angular/forms';
 export class Login {
   cdr: ChangeDetectorRef = inject(ChangeDetectorRef);  
   isLoggingMode: boolean = true;
+  authService: AuthService = inject(AuthService);
 
-  toggleMode(){
+  toggleMode(formData: NgForm){
     this.isLoggingMode = !this.isLoggingMode;
-    this.cdr.detectChanges();
+    formData.reset();
   }
 
   onSubmit(formData: NgForm){
-    console.log(formData);
+    console.log(formData.value);
+    if(this.isLoggingMode){
+      return;
+    } else {
+      this.authService.signUp(formData.value.email, formData.value.password).subscribe((res)=>{
+          console.log(res);});
+    }
+    formData.reset();
   }
 }
