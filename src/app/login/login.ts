@@ -6,6 +6,9 @@ import { Snackbar } from '../utility/snackbar/snackbar';
 import { LoggingService } from '../Services/Logging.Service';
 import { Observable } from 'rxjs';
 import { AuthResponses } from '../Model/AuthResponse';
+import { Router } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-login',
@@ -21,6 +24,7 @@ export class Login {
   ifLoading: boolean = false;
   errorMeg: string | null = null;
   authObs: Observable<AuthResponses>;
+  router: Router = inject(Router);
 
   toggleMode(formData: NgForm){
     this.isLoggingMode = !this.isLoggingMode;
@@ -36,6 +40,7 @@ export class Login {
     }
     this.authObs.subscribe({next:()=>{
         this.ifLoading = false;
+        this.router.navigate(['dashboard']);
         this.cdr.detectChanges();}, 
         error: (err)=>{
           this.errorLogger.logError({statusCode: err.status, errorMessage: err.message, dateTime: new Date()});

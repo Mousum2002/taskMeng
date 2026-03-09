@@ -3,8 +3,11 @@
         <h2>Task Management</h2>
     </div>
     <div class="header-nav">
-        <a href="#" routerLink="home">HOME</a>
-        <a href="#" routerLink="dashboard">DASHBOARD</a>
-        <a href="#" routerLink="login">LOGIN</a>
+        <a href="#" routerLink="">HOME</a>
+
+        @if(this.isLoggedIn){
+            <a href="#" routerLink="dashboard">DASHBOARD</a>
+        }
+        <a href="#" routerLink="login">{{isLoggedIn ? 'LOGOUT' : 'LOGIN'}}</a>
     </div>
 </header>

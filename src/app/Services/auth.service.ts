@@ -4,7 +4,7 @@ import { inject } from "@angular/core/primitives/di";
 import { AuthResponses } from "../Model/AuthResponse";
 import { catchError } from "rxjs/internal/operators/catchError";
 import { throwError } from "rxjs/internal/observable/throwError";
-import { Subject, tap } from "rxjs";
+import { BehaviorSubject, Subject, tap } from "rxjs";
 import { User } from "../Model/User";
 
 
@@ -14,20 +14,22 @@ import { User } from "../Model/User";
 
 export class AuthService {
     http: HttpClient = inject(HttpClient);
-    user = new Subject<User>();
+    user = new BehaviorSubject<User | null>(null);
 
-    signIn<AuthResponses>(username: string, password: string){
+    signIn(username: string, password: string){
       const data = {email: username, password: password, returnSecureToken: true};
       return this.http.post<AuthResponses>("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDcZ7jhkygh28Atoe5r9Us4371w6ETuYf4",data ).
       pipe(catchError(this.handleError), tap((resData:AuthResponses) => {
-        console.log(resData);
+        const user = new User(resData.email, resData.localId, resData.idToken, new Date(new Date().getTime() + +resData.expiresIn * 1000));
+        this.user.next(user);
       }
     ));};
-     signUp<AuthResponses>(username: string, password: string){
+     signUp(username: string, password: string){
         const data = {email: username, password: password, returnSecureToken: true};
         return this.http.post<AuthResponses>("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDcZ7jhkygh28Atoe5r9Us4371w6ETuYf4", data).
         pipe(catchError(this.handleError), tap((resData:AuthResponses) => {
-          console.log(resData);
+          const user = new User(resData.email, resData.localId, resData.idToken, new Date(new Date().getTime() + +resData.expiresIn * 1000));
+          this.user.next(user);
         }));
      }
 

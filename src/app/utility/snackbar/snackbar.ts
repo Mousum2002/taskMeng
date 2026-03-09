@@ -8,4 +8,5 @@ import { Component, Input } from '@angular/core';
 })
 export class Snackbar {
   @Input() errorMeg: string |null = null;
+ 
 }

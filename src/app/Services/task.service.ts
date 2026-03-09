@@ -1,8 +1,10 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Task } from "../Model/Task";
 import { map } from "rxjs/internal/operators/map";
-import { Observable, throwError,catchError } from "rxjs";
+import { Observable, throwError,catchError, Subject, take, exhaustMap } from "rxjs";
+
+import { AuthService } from "./auth.service";
 
 
 @Injectable({
@@ -10,23 +12,28 @@ import { Observable, throwError,catchError } from "rxjs";
 })
 export class TaskService { 
     http: HttpClient = inject(HttpClient);
-    allTasks: Task[] = [];
+    authService: AuthService = inject(AuthService);
+
     CreateTask(data: Task){
-        const header = new HttpHeaders({
-              'MyHeader': 'hello world'
-            });
         return this.http.post<{name:string}>('https://angularhttpclient-c80a8-default-rtdb.firebaseio.com/tasks.json',data,
-            {headers: header});
+            );
     }
 
-    fatchTasks(){    
-    return this.http.get<{[key:string]: Task}>('https://angularhttpclient-c80a8-default-rtdb.firebaseio.com/tasks.json').pipe(map((response)=>{
-      let tasks = [];
-      for(let key in response){
-        if(response.hasOwnProperty(key)){
-        tasks.push({...response[key], id: key})}
+    fetchTasks() {
+  return this.http.get<{[key: string]: Task}>('https://angularhttpclient-c80a8-default-rtdb.firebaseio.com/tasks.json').pipe(
+    map(response => {
+      const tasks: Task[] = [];
+      for (const key in response) {
+        if (response.hasOwnProperty(key)) {
+          tasks.push({ ...response[key], id: key });
+        }
       }
-      return tasks;}))}
+      return tasks;
+    })
+  );
+}
+
+    
   
     updateTask(data: Task):Observable<Task>{
        return this.http.put<Task>(`https://angularhttpclient-c80a8-default-rtdb.firebaseio.com/tasks/${data.id}.json`, data);
