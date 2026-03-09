@@ -4,6 +4,8 @@ import { AuthService } from '../Services/auth.service';
 import { Loader } from '../utility/loader/loader';
 import { Snackbar } from '../utility/snackbar/snackbar';
 import { LoggingService } from '../Services/Logging.Service';
+import { Observable } from 'rxjs';
+import { AuthResponses } from '../Model/AuthResponse';
 
 @Component({
   selector: 'app-login',
@@ -18,48 +20,33 @@ export class Login {
   authService: AuthService = inject(AuthService);
   ifLoading: boolean = false;
   errorMeg: string | null = null;
+  authObs: Observable<AuthResponses>;
 
   toggleMode(formData: NgForm){
     this.isLoggingMode = !this.isLoggingMode;
     formData.reset();
   }
 
-  onSubmit(formData: NgForm){
-    console.log(formData.value);
+  onSubmit(formData: NgForm){ 
+
     if(this.isLoggingMode){
-      this.authService;
+      this.authObs = this.authService.signIn(formData.value.email, formData.value.password)
     } else {
-      this.ifLoading = true;
-      this.cdr.detectChanges();
-      this.authService.signUp(formData.value.email, formData.value.password).subscribe({next:(res)=>{
+      this.authObs = this.authService.signUp(formData.value.email, formData.value.password)
+    }
+    this.authObs.subscribe({next:()=>{
         this.ifLoading = false;
         this.cdr.detectChanges();}, 
         error: (err)=>{
           this.errorLogger.logError({statusCode: err.status, errorMessage: err.message, dateTime: new Date()});
           this.ifLoading = false;
-          switch(err.error.error.message){
-            case "EMAIL_EXISTS":
-              this.errorMeg = "An account with this email already exists.";
-              break;
-            
-              case "OPERATION_NOT_ALLOWED":
-              this.errorMeg = "Password sign-in is disabled for this project.";
-              break;
-            
-              case "TOO_MANY_ATTEMPTS_TRY_LATER":
-              this.errorMeg = "Too many unsuccessful login attempts. Please try again later.";
-              break;
-            
-            default:
-              this.errorMeg = "An error occurred while signing up. Please try again.";
-          }
+          this.errorMeg = err;
           this.cdr.detectChanges();
           setTimeout(() => {
           this.errorMeg = null;
           this.cdr.detectChanges();}, 4000);
         }
       });
-    }
     formData.reset();
   }
 }
