@@ -91,7 +91,7 @@ export class Dashboard implements OnInit {
 
   private fetchTasks(){
     this.isLoading = true;
-    this.taskService.fatchTasks().subscribe
+    this.taskService.fetchTasks().subscribe
     ({next:(tasks)=>{
       this.allTasks = tasks;
       this.isLoading = false;

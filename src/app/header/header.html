@@ -5,9 +5,13 @@
     <div class="header-nav">
         <a href="#" routerLink="">HOME</a>
 
-        @if(this.isLoggedIn){
-            <a href="#" routerLink="dashboard">DASHBOARD</a>
+        @if(isLoggedIn){
+            <a  routerLink="dashboard">DASHBOARD</a>
+            <a  (click)="onLogout()">LOGOUT</a>
         }
-        <a href="#" routerLink="login">{{isLoggedIn ? 'LOGOUT' : 'LOGIN'}}</a>
+        @else {
+            <a routerLink="login">LOGIN</a>
+        }
+        
     </div>
 </header>

@@ -7,16 +7,13 @@ import { AuthInterceptorService } from './Services/auth-interceptor.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(
-      withInterceptorsFromDi()  // Enables class-based interceptors
-    ),
+    provideHttpClient(withInterceptorsFromDi()),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,
-      multi: false
+      multi: true
     },
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes),
-    provideHttpClient()
+    provideRouter(routes)
   ]
 };
