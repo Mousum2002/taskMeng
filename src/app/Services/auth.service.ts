@@ -9,6 +9,8 @@ import { AuthResponse } from "../Model/AuthResponse";
 
 export class AuthService {
     http: HttpClient = inject(HttpClient);
+
+    signIn(username: string, password: string){}
      signUp(username: string, password: string){
         const data = {email: username, password: password, returnSecureToken: true};
         

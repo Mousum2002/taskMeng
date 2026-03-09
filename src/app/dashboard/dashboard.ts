@@ -7,11 +7,13 @@ import {Subject } from 'rxjs';
 import { TaskService } from '../Services/task.service';
 import { LoggingService } from '../Services/Logging.Service';
 import { TaskDetails } from "./task-details/task-details";
+import { Loader } from '../utility/loader/loader';
+import { Snackbar } from '../utility/snackbar/snackbar';
 
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CreateTask, CommonModule, TaskDetails],
+  imports: [CreateTask, CommonModule, TaskDetails,Loader,Snackbar],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })

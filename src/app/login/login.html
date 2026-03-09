@@ -1,6 +1,10 @@
 <div class="app-login-form">
     <h2>{{ isLoggingMode ? 'Login' : 'Sign Up' }} Here</h2>
-    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+    @if (errorMeg) {
+        <app-snackbar [errorMeg]="errorMeg"></app-snackbar>
+    }
+    @if (!ifLoading) {
+        <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
         <div class = "form-input">
             <label> Email Address</label>
             <input ngModel type="email" placeholder="Enter your email" required email name="email" >
@@ -20,4 +24,8 @@
             </button>
         </p>
     </form>
+    }
+    @else {
+        <app-loader></app-loader>
+    }
 </div>

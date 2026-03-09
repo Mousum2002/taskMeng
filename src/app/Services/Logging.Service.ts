@@ -10,7 +10,7 @@ export class LoggingService {
 
     logError(data:{statusCode: number, errorMessage: string, dateTime: Date}){
         this.http.post('https://angularhttpclient-c80a8-default-rtdb.firebaseio.com/logs.json', data).subscribe((res)=>{
-            console.log(res);
+           
         });
     }
     fetcherrors(){

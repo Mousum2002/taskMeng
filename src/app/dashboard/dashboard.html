@@ -31,9 +31,10 @@
         
 <div class="dashboard-item-container">
 @if (errorMeg) {
-<div class="sb sb-error"> {{ errorMeg }}</div>}
+  <app-snackbar [errorMeg]="errorMeg"></app-snackbar>
+}
 @if (isLoading) {
-  <div class="loader"></div>
+  <app-loader></app-loader>
 }
 @else {
   @for (task of allTasks;  track task.id) {
