@@ -1,8 +1,9 @@
 import { Routes } from '@angular/router';
-import { Dashboard } from './dashboard/dashboard';
 import { Home } from './home/home';
 import { Login } from './login/login';
 import { canActivate } from './RouteGurds/authGurd';
+import { Dashboard } from './dashboard/dashboard';
+import { Stats } from './dashboard/stats/stats';
 
 
 export const routes: Routes = [
@@ -10,7 +11,7 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: Dashboard,
-    canActivate: [canActivate]
+    canActivate: [canActivate], 
   },
   { path: 'login', component: Login }
 ];

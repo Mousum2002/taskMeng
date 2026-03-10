@@ -1,0 +1,34 @@
+<div class="statis-content">
+    <h2>Task Status & Percentage</h2>
+    <table>
+        <thead>
+            <td>Status</td>
+            <td>Count</td>
+            <td>Percentage</td>
+        </thead>
+        @if (open>0) { <tr>
+            <td>Open</td>
+            <td>{{open}}</td>
+            <td>{{(open/total *100).toFixed(2)}}</td>
+
+        </tr>}
+       
+        @if (started > 0) {<tr>
+            <td>Started</td>
+            <td>{{started}}</td>
+            <td>{{(started/total *100).toFixed(2)}}</td>
+
+        </tr>}
+        @if (inProgress > 0) {<tr>
+            <td>In Progress</td>
+            <td>{{inProgress}}</td>
+            <td>{{(inProgress/total *100).toFixed(2)}}</td>
+        </tr>}
+        @if (completed > 0) { <tr>
+            <td>Completed</td>
+            <td>{{completed}}</td>
+            <td>{{(completed/total *100).toFixed(2)}}</td>
+        </tr>}
+       
+    </table>
+</div>

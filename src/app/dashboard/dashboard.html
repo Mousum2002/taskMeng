@@ -61,5 +61,18 @@
     <div class="no-tasks">No tasks available</div>
   }
 }
+
 </div>
+<div class="stats-btn-container">
+  <button
+    class="stats-toggle-btn"
+    routerLink="/dashboard/stats"
+    (click)="showingStats = !showingStats">
+    {{ showingStats ? '-' : '+' }}
+  </button>
 </div>
+
+</div>
+@if (showingStats) {<app-stats [tasks] = "allTasks"></app-stats>}
+
+

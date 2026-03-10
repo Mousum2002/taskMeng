@@ -9,14 +9,18 @@ import { LoggingService } from '../Services/Logging.Service';
 import { TaskDetails } from "./task-details/task-details";
 import { Loader } from '../utility/loader/loader';
 import { Snackbar } from '../utility/snackbar/snackbar';
+import { Stats } from './stats/stats';
+
+
 
 
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CreateTask, CommonModule, TaskDetails,Loader,Snackbar],
+  imports: [CreateTask, CommonModule, TaskDetails, Loader, Snackbar, Stats],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
+  standalone: true,
 })
 export class Dashboard implements OnInit {
 
@@ -27,6 +31,7 @@ export class Dashboard implements OnInit {
    cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
    taskService: TaskService = inject(TaskService);
    allTasks: Task[] = [];
+   showingStats: boolean = false;
 
    isLoading:boolean = false;
    error$ = new Subject<HttpErrorResponse>;
