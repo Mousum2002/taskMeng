@@ -2,10 +2,10 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Task } from "../Model/Task";
 import { map } from "rxjs/internal/operators/map";
-import { Observable, throwError,catchError, Subject, take, exhaustMap } from "rxjs";
+import { Observable } from "rxjs";
 
 import { AuthService } from "./auth.service";
-import { User } from "../Model/User";
+
 
 
 @Injectable({

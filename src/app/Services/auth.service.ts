@@ -6,6 +6,7 @@ import { throwError } from "rxjs/internal/observable/throwError";
 import { BehaviorSubject, Subject, tap } from "rxjs";
 import { User } from "../Model/User";
 import { Router } from "@angular/router";
+import { environment } from "../../environments/environment.development";
 
 
 @Injectable({
@@ -20,7 +21,7 @@ export class AuthService {
 
     signIn(username: string, password: string){
       const data = {email: username, password: password, returnSecureToken: true};
-      return this.http.post<AuthResponses>("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDcZ7jhkygh28Atoe5r9Us4371w6ETuYf4",data ).
+      return this.http.post<AuthResponses>("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + environment.firebaseApiKey,data ).
       pipe(catchError(this.handleError), tap((resData:AuthResponses) => {
         const user = new User(resData.email, resData.localId, resData.idToken, new Date(new Date().getTime() + +resData.expiresIn * 1000));
         this.user.next(user);
@@ -30,7 +31,7 @@ export class AuthService {
     ));};
      signUp(username: string, password: string){
         const data = {email: username, password: password, returnSecureToken: true};
-        return this.http.post<AuthResponses>("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDcZ7jhkygh28Atoe5r9Us4371w6ETuYf4", data).
+        return this.http.post<AuthResponses>("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + environment.firebaseApiKey, data).
         pipe(catchError(this.handleError), tap((resData:AuthResponses) => {
           const user = new User(resData.email, resData.localId, resData.idToken, new Date(new Date().getTime() + +resData.expiresIn * 1000));
           this.user.next(user);
