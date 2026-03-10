@@ -26,3 +26,4 @@ You can either:
 * `error_logs`: Automated application error tracking.
 
 
+Localhost Restriction: This application uses API Key Restrictions for security. If you clone this repository and run it on localhost, the Firebase services will be blocked.
