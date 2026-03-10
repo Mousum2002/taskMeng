@@ -1,2 +1,3 @@
-
-<div class="sb sb-error"> {{ errorMeg }}</div>
+<div class="sb sb-error" [class.sb--visible]="!!errorMeg">
+  {{ errorMeg }}
+</div>

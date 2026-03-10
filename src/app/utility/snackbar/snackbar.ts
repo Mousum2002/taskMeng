@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { WritableSignal } from '@angular/core';
+
 
 @Component({
   selector: 'app-snackbar',
@@ -7,6 +9,6 @@ import { Component, Input } from '@angular/core';
   styleUrl: './snackbar.css',
 })
 export class Snackbar {
-  @Input() errorMeg: string |null = null;
+  @Input() errorMeg: string |null | WritableSignal<string | null> = null;
  
 }

@@ -1,8 +1,8 @@
 <div class="app-login-form">
     <h2>{{ isLoggingMode ? 'Login' : 'Sign Up' }} Here</h2>
 
-    @if (errorMeg) {
-        <app-snackbar [errorMeg]="errorMeg"></app-snackbar>
+    @if (errorMeg()) {
+        <app-snackbar [errorMeg]="errorMeg()"></app-snackbar>
     }
     @if (!ifLoading) {
         <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">

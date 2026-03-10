@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject, NgZone, signal } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from '../Services/auth.service';
 import { Loader } from '../utility/loader/loader';
@@ -22,36 +22,49 @@ export class Login {
   isLoggingMode: boolean = true;
   authService: AuthService = inject(AuthService);
   ifLoading: boolean = false;
-  errorMeg: string | null = null;
+  errorMeg = signal<string | null>(null);
   authObs: Observable<AuthResponses>;
   router: Router = inject(Router);
+  zone: NgZone = inject(NgZone);
+
 
   toggleMode(formData: NgForm){
     this.isLoggingMode = !this.isLoggingMode;
     formData.reset();
   }
 
-  onSubmit(formData: NgForm){ 
-
-    if(this.isLoggingMode){
-      this.authObs = this.authService.signIn(formData.value.email, formData.value.password)
-    } else {
-      this.authObs = this.authService.signUp(formData.value.email, formData.value.password)
-    }
-    this.authObs.subscribe({next:()=>{
-        this.ifLoading = false;
-        this.router.navigate(['dashboard']);
-        this.cdr.detectChanges();}, 
-        error: (err)=>{
-          this.errorLogger.logError({statusCode: err.status, errorMessage: err.message, dateTime: new Date()});
-          this.ifLoading = false;
-          this.errorMeg = err;
-          this.cdr.detectChanges();
-          setTimeout(() => {
-          this.errorMeg = null;
-          this.cdr.detectChanges();}, 4000);
-        }
-      });
-    formData.reset();
+  onSubmit(formData: NgForm) {
+  if (this.isLoggingMode) {
+    this.authObs = this.authService.signIn(
+      formData.value.email,
+      formData.value.password
+    );
+  } else {
+    this.authObs = this.authService.signUp(
+      formData.value.email,
+      formData.value.password
+    );
   }
+
+  this.authObs.subscribe({
+    next: () => {
+      this.ifLoading = false;
+      this.router.navigate(['dashboard']);
+    },
+    error: (err) => {
+      this.errorLogger.logError({
+        statusCode: err.status,
+        errorMessage: err.message,
+        dateTime: new Date()
+      });
+      this.ifLoading = false;
+      this.errorMeg.set(err);
+      setTimeout(() => {
+        this.errorMeg.set(null);
+      }, 4000);
+    }
+  });
+  formData.reset();
+}
+
 }

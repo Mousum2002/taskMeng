@@ -13,7 +13,7 @@ import { Router } from "@angular/router";
 })
 
 export class AuthService {
-    user = new BehaviorSubject<User | null>(null);
+    user = new BehaviorSubject<User>(null);
 
     constructor(private http: HttpClient, private router: Router) {}
     private tokenExpiretimer: any;
