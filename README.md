@@ -4,14 +4,6 @@ A responsive task manager built with **Angular** and **Firebase**.
 
 👉 **[Live Demo](https://angularhttpclient-c80a8.web.app/)**
 
-### Tech Stack
-
-* **Frontend:** Angular (SPA)
-* **Backend:** Firebase (Static Hosting & Auth)
-* **Database:** Firestore NoSQL
-* `tasks`: User-specific task management.
-* `error_logs`: Automated application error tracking.
-
 ## Usage
 You can either:
 
@@ -24,3 +16,13 @@ You can either:
 
    - Sign up with any email address.
    - You’ll get a private dashboard with your own task data.
+
+### Tech Stack
+
+* **Frontend:** Angular (SPA)
+* **Backend:** Firebase (Static Hosting & Auth)
+* **Database:** Firestore NoSQL
+* `tasks`: User-specific task management.
+* `error_logs`: Automated application error tracking.
+
+
